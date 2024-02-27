@@ -55,9 +55,9 @@ export const columnData = [
     header: "Car Selected",
     accessorKey: "carsSelected",
     cell: ({ row }) => (
-      <div className="flex flex-wrap gap-1" key={v4()}>
+      <div className="flex flex-wrap gap-1" >
         {row.original.carsSelected.map((car) => (
-          <span className=" p-1 border uppercase text-xs">{car}</span>
+          <span key={v4()} className=" p-1 border uppercase text-xs">{car}</span>
         ))}
       </div>
     ),

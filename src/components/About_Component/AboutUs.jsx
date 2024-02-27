@@ -25,7 +25,7 @@ const AboutUs = () => {
               You Start the <br /> Engine and the adventure starts
             </h2>
             <p className=" ptext text-base border-b pb-5 text-[rgba(255,255,255,0.7)] ">
-            At CIA Luxury Fleet, customer satisfaction and safety are paramount. We've built our reputation on reliability and professionalism, ensuring seamless transportation solutions tailored to your needs. Whether it's a single vehicle or a fleet for your company, our dedicated team is here to streamline your logistics experience. Choose us for a journey marked by trust, efficiency, and unparalleled service.
+            At CIA Luxury Fleet, customer satisfaction and safety are paramount. We&apos;ve built our reputation on reliability and professionalism, ensuring seamless transportation solutions tailored to your needs. Whether it&apos;s a single vehicle or a fleet for your company, our dedicated team is here to streamline your logistics experience. Choose us for a journey marked by trust, efficiency, and unparalleled service.
             </p>
           </div>
         </div>
@@ -98,7 +98,7 @@ const AboutUs = () => {
             </div>
             <div className="grid grid-cols-1 gap-y-16">
               {whychooseusBenefits.map((benefits) => (
-                <div className="grid grid-cols-3">
+                <div key={uuidv4()} className="grid grid-cols-3">
                   <div className="col-span-1">
                     <img src={benefits.img} alt="" />
                   </div>

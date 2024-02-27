@@ -79,7 +79,7 @@ const OurCarDisplay = () => {
           {data[category].catalog
             .filter((info) => info.name === selectedCar)
             .map((datum) => (
-              <div className="h-full w-full flex flex-col items-start justify-center gap-5">
+              <div key={v4()} className="h-full w-full flex flex-col items-start justify-center gap-5">
                 <span className="text-xs text-[rgba(225,225,225,0.8)] font-medium uppercase">
                   Vehicle name : {datum.name}
                 </span>

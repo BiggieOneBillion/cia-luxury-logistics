@@ -1,7 +1,7 @@
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import EditDialog from "./EditDialog";
-import { v4 } from "uuid";
+import { v3, v4 } from "uuid";
 
 // const handleRowClick = (rowData) => {
 //   // Your custom logic here, using rowData as needed
@@ -54,7 +54,7 @@ export const columnData = [
     cell: ({ row }) => (
       <div className="flex flex-wrap gap-1">
         {row.original.carsSelected.map((car) => (
-          <span className=" p-1 border uppercase text-xs">{car}</span>
+          <span key={v4()} className=" p-1 border uppercase text-xs">{car}</span>
         ))}
       </div>
     ),
@@ -117,6 +117,6 @@ export const columnData = [
   {
     header: "",
     accessorKey: "id",
-    cell: ({ row }) => <EditDialog data={row.original} />,
+    cell: ({ row }) => <EditDialog data={row.original} key={v3()}/>,
   },
 ];

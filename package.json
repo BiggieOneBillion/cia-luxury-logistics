@@ -15,6 +15,7 @@
     "csshake": "^1.7.0",
     "framer-motion": "^10.18.0",
     "mongoose": "^8.1.1",
+    "nanoid": "^5.0.6",
     "next": "14.0.4",
     "nodemailer": "^6.9.8",
     "paystack": "^2.0.1",

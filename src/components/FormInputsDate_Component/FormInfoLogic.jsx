@@ -60,3 +60,7 @@ export const EndDateElement = forwardRef(({ value, onClick }, ref) => {
     </>
   );
 });
+
+EndDateElement.displayName = "EndDateElement";
+
+ExampleDateContainer.displayName = "ExampleDateContainer";

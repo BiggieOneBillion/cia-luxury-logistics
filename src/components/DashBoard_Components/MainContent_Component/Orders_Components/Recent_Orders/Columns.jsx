@@ -1,5 +1,5 @@
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { v4 } from "uuid";
+import { v3 } from "uuid";
 
 // const handleRowClick = (rowData) => {
 //   // Your custom logic here, using rowData as needed
@@ -75,9 +75,9 @@ export const columnData = [
     header: "Car Selected",
     accessorKey: "carsSelected",
     cell: ({ row }) => (
-      <div className="flex flex-wrap gap-1" key={v4()}>
+      <div  className="flex flex-wrap gap-1">
         {row.original.carsSelected.map((car) => (
-          <span className=" p-1 border uppercase text-xs">{car}</span>
+          <span key={v3()} className=" p-1 border uppercase text-xs">{car}</span>
         ))}
       </div>
     ),
@@ -108,7 +108,7 @@ export const columnData = [
     accessorKey: "paymentStatus",
     cell: ({ row }) => (
       <span
-        key={v4()}
+        key={v3()}
         className={`px-3 rounded-lg py-1 text-white font-medium ${
           row.original.paymentStatus == false ? "bg-red-800" : "bg-green-800"
         }`}
