@@ -7,10 +7,17 @@ import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { FiTwitter } from "react-icons/fi";
 import { ImPinterest2 } from "react-icons/im";
 import { footerFormSchema } from "@/utils/Client_validations/validations";
+import axios from "axios";
 
 const Footer = () => {
   // let {scrollYProgress} = useScroll()
   // let y = useTransform(scrollYProgress, [0,1], ["0%","10%"])
+
+  const [isDisable, setIsDisable] = useState(false);
+  const [isSuccess, setIsSuccess] = useState({
+    status: false,
+    message: "",
+  });
 
   const fullnameRef = useRef();
   const EmailnameRef = useRef();
@@ -22,19 +29,35 @@ const Footer = () => {
   });
   const [, setRefresh] = useState(false);
 
-  const validateAndSubmit = (e) => {
+  const validateAndSubmit = async (e) => {
     e.preventDefault();
+    setIsDisable(true);
     const inputValues = {
       email: EmailnameRef.current.value,
       fullname: fullnameRef.current.value,
       message: MessageRef.current.value,
     };
     if (footerFormSchema.safeParse(inputValues).success) {
+      await axios
+        .post("/api/leave-a-message", {
+          fullName: inputValues.fullname,
+          email: inputValues.email,
+          message: inputValues.message,
+        })
+        .then((res) => {
+          setIsSuccess({ ...isSuccess, status: true, message: "Message Delivered!" });
+          setTimeout(
+            () => setIsSuccess({ ...isSuccess, status: false, message: "" }),
+            5000
+          );
+        })
+        .catch((err) => console.log(err));
       resetInputValues();
     } else {
       const error = footerFormSchema.safeParse(inputValues).error.issues;
       handleFormError(error);
     }
+    setIsDisable(false);
   };
 
   function handleFormError(error) {
@@ -104,8 +127,13 @@ const Footer = () => {
         </ul>
         {/* </div> */}
         <form className="flex flex-col gap-3 ml-autou">
+          {isSuccess.status && (
+            <span className="bg-green-800 text-center inline-block px-2 py-1 text-white text-xs font-medium">
+              {isSuccess.message}
+            </span>
+          )}
           {errorMessage.fullname && (
-            <span className="text-red-800 text-xs font-medium">
+            <span className="text-red-800 text-base  font-medium">
               {errorMessage.fullname}
             </span>
           )}
@@ -148,8 +176,9 @@ const Footer = () => {
           ></textarea>
 
           <button
-            className="bg-[#D98E04] py-2 hover:bg-[#d98e04bd] transition-all"
+            className="bg-[#D98E04] py-2 hover:bg-[#d98e04bd] disabled:bg-[#d98e0458] disabled:cursor-wait transition-all"
             onClick={(e) => validateAndSubmit(e)}
+            disabled={isDisable}
           >
             Submit
           </button>
