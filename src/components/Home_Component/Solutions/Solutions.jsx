@@ -30,7 +30,7 @@ const Solutions = () => {
         },
     ]
   return (
-    <div className='px-3 lg:w-[80%] mx-auto space-y-20'>
+    <div className='px-3 lg:w-[80%] mx-auto space-y-10 md:space-y-20'>
        <header>
          <p className='text-[#9ca3af] text-[18px] leading-[28px] font-semibold text-center capitalize'>What we offer</p>
          <h2 className='font-bold text-[32px] leading-[48px] text-white text-center '>Our Services</h2>

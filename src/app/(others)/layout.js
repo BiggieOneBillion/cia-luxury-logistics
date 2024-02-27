@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Inter,Ubuntu, Roboto } from "next/font/google";
 // import "./globals.css";
 import "../globals.css"
 import { Providers } from "../Providers";

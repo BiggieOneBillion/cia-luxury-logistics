@@ -9,17 +9,28 @@ import { useGlobalContext } from "@/Context/GlobalContext";
 import FormSection from "@/components/BookingForm_Component/FormSection";
 import NewSection from "@/components/Home_Component/New Section/NewSection";
 import Solutions from "@/components/Home_Component/Solutions/Solutions";
-
-
+import HeroSectionMobile from "@/components/NewUI/HeroSection";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const { bookNow } = useGlobalContext();
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (window.innerWidth > 480) {
+      setIsMobile(false);
+    } else {
+      setIsMobile(true);
+    }
+  }, []);
+
   return (
     <div>
-      <HeroSection />
+      {isMobile ? <HeroSectionMobile /> : <HeroSection />}
       <SectionSpecial />
       <NewSection />
-      <SectionAboutUs />
+      {!isMobile && <SectionAboutUs />}
       <Solutions />
       <Testomonial />
       <BookACar />

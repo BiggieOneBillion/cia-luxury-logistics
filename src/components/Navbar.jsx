@@ -6,13 +6,21 @@ import Link from "next/link";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdOutlineClose } from "react-icons/md";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
 
-  const handleOpenMeun = () => {
+  const router = useRouter();
+
+  const handleToggleMenu = () => {
     setOpenMenu(!openMenu);
   };
+
+  const handleGoToPage = (path) => {
+      handleToggleMenu();
+      router.push(path)
+  }
 
   const liSpanStyle =
     "py-1 px-2  hover:text-primaryYellow transition-all cursor-pointer hover:left-6 hover:scale(1.1)";
@@ -25,7 +33,7 @@ const Navbar = () => {
   };
 
   const handleClickScrollmd = (id) => {
-    handleOpenMeun();
+    handleToggleMenu();
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -34,7 +42,7 @@ const Navbar = () => {
 
   const handleClose = (e) => {
     if (e.target.classList.contains("navmenu")) {
-      handleOpenMeun();
+      handleToggleMenu();
     }
   };
 
@@ -52,7 +60,7 @@ const Navbar = () => {
           {!openMenu ? (
             <span
               className="text-2xl p-2 flex flex-col gap-y-1  text-white mb-[7px]"
-              onClick={handleOpenMeun}
+              onClick={handleToggleMenu}
             >
               {/* <GiHamburgerMenu/> */}
               <span className="w-6 h-[3px] rounded bg-white "></span>
@@ -66,7 +74,7 @@ const Navbar = () => {
               initial={{ opacity: 0, x: 20, scale: 0 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               transition={{ duration: 0.3, type: "tween" }}
-              onClick={handleOpenMeun}
+              onClick={handleToggleMenu}
             >
               <MdOutlineClose />
             </motion.span>
@@ -80,11 +88,10 @@ const Navbar = () => {
           >
             <ul className="flex flex-col gap-5 uppercase text-[14px] font-medium w-full bg-[rgba(3,101,123,1)] py-5 px-5">
               <li>
-                <Link href={"/"} className={liSpanStyle}>
+                <span onClick={()=> handleGoToPage('/')} href={"/"} className={liSpanStyle}>
                   home
-                </Link>
+                </span>
               </li>
-              {/* <li><span className={liSpanStyle} onClick={()=>handleClickScrollmd('contactUs')}>contact</span></li> */}
               <li>
                 <a
                   href="#contactUs"
@@ -93,42 +100,20 @@ const Navbar = () => {
                   contact
                 </a>
               </li>
-
-              {/* <li>
-                <Link
-                  href={"/team"}
-                  className={liSpanStyle}
-                  onClick={() => handleClickScrollmd("services")}
-                >
-                  Team
-                </Link>
-              </li> */}
               <li>
-                <Link
-                  href={"/fleet"}
-                  className={liSpanStyle}
-                  onClick={() => handleClickScrollmd("fleet")}
-                >
+                <span onClick={()=> handleGoToPage('/fleet')}  className={liSpanStyle}>
                   fleet
-                </Link>
+                </span>
               </li>
               <li>
-                <Link
-                  href={"/about"}
-                  className={liSpanStyle}
-                  onClick={() => handleClickScrollmd("aboutUs")}
-                >
+                <span onClick={()=> handleGoToPage('/about')}  className={liSpanStyle}>
                   About Us
-                </Link>
+                </span>
               </li>
               <li>
-                <Link
-                  href={"/order"}
-                  className={liSpanStyle}
-                  onClick={() => handleClickScrollmd("aboutUs")}
-                >
+                <span onClick={()=> handleGoToPage('/order')}  className={liSpanStyle}>
                   Order
-                </Link>
+                </span>
               </li>
             </ul>
           </div>
