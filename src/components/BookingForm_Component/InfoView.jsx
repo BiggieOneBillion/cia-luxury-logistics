@@ -9,7 +9,10 @@ import axios from "axios";
 // import { data } from "autoprefixer";
 
 const InfoView = ({ setInputType }) => {
+  
   const { formDatum, setFormDatum, handleReset, handleShowCongratulation } = useFormDatum();
+
+  console.log(formDatum);
 
   const [btnSubmit, setBtnSubmit] = useState({
     text: "Make The Order",
@@ -28,6 +31,7 @@ const InfoView = ({ setInputType }) => {
     e.preventDefault();
     setBtnSubmit({...btnSubmit, isLoading:true});
     const response = await axios.post("/api/userformsubmit", formDatum);
+    console.log(response.status);
     if (response.status === 200) {
       setBtnSubmit({...btnSubmit, text: 'Successful'});
       console.log("Data sent");
@@ -39,13 +43,13 @@ const InfoView = ({ setInputType }) => {
       //   setNextForm(0);
       // },3000)
     }
-    console.log(response.status);
+    // console.log(response.status);
   };
 
   const handleRemoveVehicle = (name) => {
     setFormDatum({
       ...formDatum,
-      carSelected: formDatum.carSelected.filter((veh) => veh !== name),
+      carSelected: formDatum.carSelected.filter((veh) => veh.vehicle !== name),
     });
   };
 
@@ -150,7 +154,7 @@ const InfoView = ({ setInputType }) => {
         {/* <p className='font-medium text-[16px] text-[rgba(0,0,0,1)] uppercase'>{`${formDatum.carSelected.join()}`}</p> */}
         <div className="flex flex-col gap-y-2">
           {formDatum.carSelected.map((veh) => (
-            <CarAmount data={veh} key={uuidv4()} remove={handleRemoveVehicle} />
+            <CarAmount data={veh} key={uuidv4()} remove={handleRemoveVehicle} btnDisable={btnSubmit.isLoading}/>
           ))}
         </div>
       </div>

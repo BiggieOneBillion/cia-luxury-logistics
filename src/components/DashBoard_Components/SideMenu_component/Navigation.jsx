@@ -8,6 +8,8 @@ import { GoPackage } from "react-icons/go";
 import { MdOutlinePayment } from "react-icons/md";
 import { v4 } from "uuid";
 import { usePathname } from "next/navigation";
+import { FaCar } from "react-icons/fa";
+
 
 const Navigation = () => {
   const pathName = usePathname();
@@ -16,7 +18,7 @@ const Navigation = () => {
     {
       name: "Analytics",
       icon: <SiGoogleanalytics />,
-      path: "/dashboard/analytics",
+      path: "/dashboard",
     },
     {
       name: "Customers",
@@ -32,6 +34,11 @@ const Navigation = () => {
       name: "Payment",
       icon: <MdOutlinePayment />,
       path: "/dashboard/payments",
+    },
+    {
+      name: "Vehicle Management",
+      icon: <FaCar />,
+      path: "/dashboard/vehicle",
     },
   ];
   return (

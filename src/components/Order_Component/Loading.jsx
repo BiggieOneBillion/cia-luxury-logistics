@@ -3,7 +3,7 @@ import React from "react";
 const Loading = () => {
   return (
     <div aria-label="Loading..." role="status" className="loader-btn">
-      <svg class="loader-btn-icon" viewBox="0 0 256 256">
+      <svg className="loader-btn-icon" viewBox="0 0 256 256">
         <line
           x1="128"
           y1="32"

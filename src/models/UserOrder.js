@@ -13,7 +13,6 @@ const userOrderSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
   },
   pickupLocation: {
     type: String,
@@ -32,7 +31,7 @@ const userOrderSchema = new mongoose.Schema({
     required: true,
   },
   carsSelected: {
-    type: [String],
+    type: [{}],
     required: true,
   },
   paymentStatus: {
@@ -45,7 +44,6 @@ const userOrderSchema = new mongoose.Schema({
   },
 });
 
-const UserOrder =
-  mongoose.models.User_order || mongoose.model("User_order", userOrderSchema);
+const UserOrder =  mongoose.models.User_orderInfo || mongoose.model("User_orderInfo", userOrderSchema);
 
 export default UserOrder;

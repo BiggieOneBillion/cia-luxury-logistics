@@ -1,0 +1,35 @@
+[
+  {
+    "_id": "new ObjectId('65b3e8dd9a07e4b42fb4445b')",
+    "brandName": "TOYOTA",
+    "modelName": "PRADO",
+    "seatCapacity": "4",
+    "fuelCapacity": "50",
+    "driveTrain": "4X4",
+    "amount": "60000",
+    "category": "SUV",
+    "__v": 0
+  },
+  {
+    "_id": "new ObjectId('65b3e8dd9a07e4b42fb4445b')",
+    "brandName": "TOYOTA",
+    "modelName": "CAMRY",
+    "seatCapacity": "4",
+    "fuelCapacity": "50",
+    "driveTrain": "FRONT-WHEEL DRIVE",
+    "amount": "40000",
+    "category": "CAR",
+    "__v": 0
+  },
+  {
+    "_id": "new ObjectId('65b3e8dd9a07e4b42fb4445b')",
+    "brandName": "TOYOTA",
+    "modelName": "HIACE",
+    "seatCapacity": "12",
+    "fuelCapacity": "70",
+    "driveTrain": "4X4",
+    "amount": "35000",
+    "category": "BUS",
+    "__v": 0
+  }
+]

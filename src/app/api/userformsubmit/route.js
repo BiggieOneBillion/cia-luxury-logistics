@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { dbConnect } from "@/libs/db";
-import  UserOrder  from "@/models/UserOrder";
+import UserOrder from "@/models/UserOrder";
 import { registrationSchema } from "../../../utils/validations/userOrderValidations";
 import { EmailTemplate } from "../../../components/EmailTemplate/Email-template";
 import { Resend } from "resend";
 import { sendMail, compileWelcomeTemplate } from "@/libs/mail";
+import { userOrderEditSchema } from "@/utils/validations/userOrderEditValidation";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -25,7 +26,7 @@ export async function POST(req, res) {
     const localDate = new Date(date.getTime() - offset);
     const formattedDate = localDate.toISOString().split("T")[0];
     return formattedDate;
-}
+  }
   try {
     // connect to database
     const conn = await dbConnect();
@@ -34,7 +35,7 @@ export async function POST(req, res) {
     // If true, then destructure the data variable
     let { firstname, lastname, email } = data;
 
-    console.log(data);
+    // console.log(data);
     // Create new entry from the data and save to the database
     const user = new UserOrder({
       firstName: firstname,
@@ -46,29 +47,31 @@ export async function POST(req, res) {
       endDate: handleChangeDateForm(data.endDate),
       carsSelected: data.carSelected,
       phoneNumber: data.phoneNumber,
-      paymentStatus: false
+      paymentStatus: false,
     });
     // console.log(user);
+    try {
+      const saveInfo = await user.save();
+      // console.log(saveInfo);
+      await sendMail({
+        to: email, // change it to dynamic instead of static---get it from the destructured data variable.
+        name: "Raymond",
+        subject: "Welcome Sir",
+        // body:`<h1>Hello sir, we are happy to have you</h1>`
+        // body: compileWelcomeTemplate(firstname)
+        body: `
+          <h1>Welcome to CiaLuxury, ${firstname}</h1>
+          <p>Hurray!!..You are almost done with your order!</p>
+          <p>Below is your order Id, simply go to the order page, fill the form to view your order and make payment to the bank account stated there.  </p>
+          <p>Order ID: ${saveInfo._id} . </p>
+          `,
+      });
+      return NextResponse.json({ result: "successful" });
+    } catch (error) {
+      return NextResponse.json({ error }, { status: 400, message: error });
+    }
 
-    const saveInfo = await user.save();
-
-
-
-    console.log("saveinfo : ",saveInfo._id);
-
-    await sendMail({
-      to: "rchukwu94@gmail.com", // change it to dynamic instead of static---get it from the destructured data variable.
-      name: "Raymond",
-      subject: "Welcome Sir",
-      // body:`<h1>Hello sir, we are happy to have you</h1>`
-      // body: compileWelcomeTemplate(firstname)
-      body: `
-        <h1>Welcome to CiaLuxury, ${firstname}</h1>
-        <p>Hurray!!..You are almost done with your order!</p>
-        <p>Below is your order Id, simply go to the order page, fill the form to view your order and make payment to the bank account stated there.  </p>
-        <p>Order ID: ${saveInfo._id} . </p>
-        `,
-    });
+    // console.log("saveinfo : ",saveInfo._id);
 
     // const sendEmail = await resend.emails.send({
     //   from: 'Acme <cialuxuryfleet@resend.dev>',
@@ -79,7 +82,7 @@ export async function POST(req, res) {
 
     // console.log(sendEmail);
     // Send a success response if everything goes as planned
-    return NextResponse.json({ result: "successful" });
+
     // }
 
     // If validation fails then set the status code to 400 and write the error message
@@ -91,11 +94,53 @@ export async function POST(req, res) {
     //   { status: 400 }
     // );
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return NextResponse.json({ error });
   }
 
   // return NextResponse.json({
   //   res: "User not verified",
   // });
+}
+
+export async function PUT(req, res) {
+  const data = await req.json();
+
+  const checkedData = { ...data };
+  delete checkedData._id;
+
+  if (userOrderEditSchema.safeParse(checkedData).success === false) {
+    return NextResponse.json(
+      { error },
+      { status: 400, message: "Validation Error" }
+    );
+  }
+
+  try {
+    // connect to database
+    try {
+      const conn = await dbConnect();
+    } catch (error) {
+      return NextResponse.json(
+        { error },
+        { status: 500, message: "Network Error!!" }
+      );
+    }
+
+    try {
+      const result = await UserOrder.findByIdAndUpdate(data._id, checkedData);
+      // console.log(result);
+      return NextResponse.json({ result: "successful" });
+    } catch (error) {
+      return NextResponse.json(
+        { error },
+        { status: 400, message: "Not Updated" }
+      );
+    }
+
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ error });
+  }
+
 }

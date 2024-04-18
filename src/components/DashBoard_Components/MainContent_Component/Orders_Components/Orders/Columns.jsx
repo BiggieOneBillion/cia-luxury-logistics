@@ -54,7 +54,10 @@ export const columnData = [
     cell: ({ row }) => (
       <div className="flex flex-wrap gap-1">
         {row.original.carsSelected.map((car) => (
-          <span key={v4()} className=" p-1 border uppercase text-xs">{car}</span>
+          <span key={v4()} className=" p-1 border text-xs">
+            {car.vehicle.replace("TOYOTA", "")}
+            {/* go home */}
+          </span>
         ))}
       </div>
     ),
@@ -117,6 +120,6 @@ export const columnData = [
   {
     header: "",
     accessorKey: "id",
-    cell: ({ row }) => <EditDialog data={row.original} key={v3()}/>,
+    cell: ({ row }) => <EditDialog data={row.original} key={v4()} />,
   },
 ];

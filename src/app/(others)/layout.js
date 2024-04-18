@@ -1,9 +1,12 @@
-import { Inter,Ubuntu, Roboto } from "next/font/google";
+import { Inter, Ubuntu, Roboto } from "next/font/google";
 // import "./globals.css";
-import "../globals.css"
+import "../globals.css";
 import { Providers } from "../Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { RecatQueryProvider } from "../RecatQueryProvider";
+// import { ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,13 +19,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
-          <div id="modal-root">
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-          </div>
-        </Providers>
+        <RecatQueryProvider>
+          <Providers>
+            {/* <ToastContainer> */}
+            <div id="modal-root">
+              <Navbar />
+              <main>{children}</main>
+              <Footer />
+            </div>
+            {/* </ToastContainer> */}
+          </Providers>
+        </RecatQueryProvider>
       </body>
     </html>
   );

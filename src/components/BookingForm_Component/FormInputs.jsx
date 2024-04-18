@@ -170,7 +170,7 @@ const FormInputs = (props, ref) => {
       </div>
       {/* <FormOneDate /> */}
       <div className="flex flex-col gap-y-4 w-[90%] mt-4">
-        <div className="flex gap-x-2">
+        {/* <div className="flex gap-x-2">
           <div>
             <label
               htmlFor="returnBack"
@@ -215,7 +215,7 @@ const FormInputs = (props, ref) => {
               onChange={handleOneway}
             />
           </div>
-        </div>
+        </div> */}
 
         <DatePicker
           selected={startDate}

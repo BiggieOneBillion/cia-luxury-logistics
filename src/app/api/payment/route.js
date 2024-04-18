@@ -10,6 +10,9 @@ export async function POST(req, res) {
     const conn = await dbConnect();
     const user = UserOrder.findById({ _id: data.id });
 
+    // Get the info 
+    // compute the actual price and send it to paystack!!!
+
     if (!user) {
       return NextResponse.json({ error: "User does not exist" });
     }
@@ -39,6 +42,7 @@ export async function POST(req, res) {
         data: response.data,
       },
     });
+
   } catch (error) {
     console.log(error);
     return NextResponse.json({ status: 500, error: "Error !!!!" });

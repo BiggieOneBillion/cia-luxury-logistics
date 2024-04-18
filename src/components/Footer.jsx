@@ -90,7 +90,7 @@ const Footer = () => {
 
   return (
     <motion.div
-      className="containerz py-10 sm:h-[40vh] lg:h-[70vh] footer relative flex justify-between items-center overflow-x-hidden md:overflow-x-visible  mt-10"
+      className="containerz py-10 sm:h-[40vh] lg:h-[40vh]y footer relative flex justify-between items-center overflow-x-hidden md:overflow-x-visible  mt-10"
       id="contactUs"
     >
       <div className="flex flex-wrap items-center justify-center gap-10 gap-y-20 md:justify-between md:items-start w-full">

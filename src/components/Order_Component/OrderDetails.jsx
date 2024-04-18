@@ -8,8 +8,11 @@ import { useRouter } from "next/navigation";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { MdOutlineClose } from "react-icons/md";
 
-const OrderDetails = ({ closeFn }) => {
+const OrderDetails = ({ closeFn, gotoEdit }) => {
   const { orderDetail } = useGlobalContext();
+  const [disableCancelBtn, setDisableCancelBtn] = useState(false);
+
+  // console.log(orderDetail);
 
   const router = useRouter();
 
@@ -36,7 +39,7 @@ const OrderDetails = ({ closeFn }) => {
     carsSelected,
     _id,
     paymentStatus,
-  } = orderDetail[0];
+  } = orderDetail;
 
   const handleClose = () => {
     // attach it to an onclick event handler on a button!
@@ -67,6 +70,27 @@ const OrderDetails = ({ closeFn }) => {
         });
       }
     }
+  };
+
+  const handleDeleteOrder = async () => {
+    const result = confirm("Are you sure you want to delete your order?");
+
+    if (result) {
+      setDisableCancelBtn(true);
+      try {
+        const response = await axios.post("api/vehicle/delete", { _id: _id });
+        if (response.status === 200) {
+          handleClose();
+        }
+      } catch (error) {
+        alert("Network Error!");
+        setDisableCancelBtn(false);
+      }
+    }
+  };
+
+  const handleEditOrder = () => {
+    gotoEdit();
   };
 
   const handlePaymentReciept = (event) => {
@@ -132,10 +156,11 @@ const OrderDetails = ({ closeFn }) => {
   };
 
   const orderDetailsCardStyle =
-    "font-semibold py-5 text-base flex flex-wrap items-center gap-1 border border-transparent hover:border-gray-500y transition-all duration-300 rounded-md hover:px-[2px]";
+    "font-semibold py-5 text-base flex flex-wrap items-center gap-1 border border-transparent hover:border-gray-500y transition-all duration-300 rounded-md hover:px-[2px]y";
   return ReactDOM.createPortal(
     <section className="fixed inset-0 md:z-[9999999] bg-white md:bg-[rgba(0,0,0,0.7)] md:grid md:place-content-center pt-[15vh] md:pt-0 overflow-y-scroll ">
       <div className="flex flex-col gap-4 items-end">
+        {/* close btn for desktop */}
         <button
           onClick={handleClose}
           className=" w-fit hidden md:inline-block font-medium active:scale-95 hover:scale-[.98] transition-transform ease-in-out duration-300 uppercase text-sm bg-red-600 text-black border-none px-4 py-1 rounded-md disabled:bg-slate-700 disabled:cursor-not-allowed"
@@ -144,7 +169,11 @@ const OrderDetails = ({ closeFn }) => {
         </button>
         <main className="lg:w-fit mx-auto">
           <div className="w-full py-10 px-10 bg-white rounded-lg flex flex-col gap-5 lg:grid lg:grid-cols-2 lg:gap-10 min-h-[500px] relative">
-            <button onClick={handleClose} className="absolute top-3 right-3 text-black text-3xl active:scale-95 transition-transform ease-in-out duration-300 md:hidden">
+            {/* close btn for mobile */}
+            <button
+              onClick={handleClose}
+              className="absolute top-3 right-3 text-black text-3xl active:scale-95 transition-transform ease-in-out duration-300 md:hidden"
+            >
               <MdOutlineClose />
             </button>
             {/* ORDER DETAILS...... */}
@@ -210,7 +239,7 @@ const OrderDetails = ({ closeFn }) => {
                     {endDate}
                   </span>
                 </p>
-                <p className={`${orderDetailsCardStyle} col-span-2`}>
+                <div className={`${orderDetailsCardStyle} col-span-2`}>
                   <span className="inline-block p-1 bg-[#011F26] text-white skew-x-[-3deg] text-sm">
                     Vehicles :
                   </span>
@@ -220,18 +249,55 @@ const OrderDetails = ({ closeFn }) => {
                         key={v4()}
                         className="text-[rgba(0,0,0,0.8)] bg-gray-200 capitalize border-r p-2 md:p-1 mr-2 font-mono"
                       >
-                        {cars}
+                        {cars.vehicle} - {cars.quantity}
                       </span>
                     ))}
                   </div>
-                </p>
+                </div>
               </div>
             </div>
             {/* PAYMENT ACCOUNT DETAILS */}
             <div className="space-y-3 md:space-y-8 md:order-2 border-b pb-5">
-              <h2 className="font-semibold text-black md:text-xl uppercase h-fit">
-                Payment Details
-              </h2>
+              <div className="flex justify-between items-center">
+                <h2 className="font-semibold text-black md:text-xl uppercase h-fit">
+                  Payment Details
+                </h2>
+                {/* ACTION BUTTON */}
+                <div className="flex gap-2 items-center">
+                  <button
+                    onClick={handleEditOrder}
+                    className=" w-fit hidden md:inline-block font-medium active:scale-95 hover:scale-[.98] transition-transform ease-in-out duration-300 uppercase text-sm bg-blue-500 text-border-none px-4 py-2 rounded-md disabled:bg-slate-700 disabled:cursor-not-allowed"
+                    disabled={disableCancelBtn}
+                  >
+                    edit order
+                  </button>
+                  <button
+                    onClick={handleDeleteOrder}
+                    className=" w-fit hidden md:inline-block font-medium active:scale-95 hover:scale-[.98] transition-transform ease-in-out duration-300 uppercase text-sm bg-red-500 text-border-none px-4 py-2 rounded-md disabled:bg-slate-700 disabled:cursor-not-allowed"
+                    disabled={disableCancelBtn}
+                  >
+                    cancel order
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <p className="text-xs uppercase text-slate-600 font-medium space-y-2">
+                  <span>
+                    Your bill is calculated using the following variables.
+                  </span>
+                  <ul className="space-y-1 list-disc list-inside">
+                    <li>Cost of hiring the car</li>
+                    <li>How many is hired</li>
+                    <li>Duration of the hiring</li>
+                  </ul>
+                </p>
+                <p className="text-slate-800 flex items-center gap-2">
+                  <span className="font-medium">You bill is :</span>
+                  <span className="inline-block px-2 py-1 bg-green-600 text-white rounded-md">
+                    #300,000
+                  </span>
+                </p>
+              </div>
               {paymentStatus ? (
                 <div className="flex h-fit justify-start items-center gap-2">
                   <p className="font-medium bg-[#011F26] text-white skew-x-[-3deg] py-1 px-2 text-sm uppercase">

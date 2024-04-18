@@ -9,19 +9,28 @@ import { useRouter } from "next/navigation";
 import { useGlobalContext } from "@/Context/GlobalContext";
 import ReactDOM from "react-dom";
 import OrderDetails from "./OrderDetails";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const Order = () => {
   const router = useRouter();
 
   const { handleOrderDetails } = useGlobalContext();
 
-  const emailRef = useRef(null);
-  const orderIdRef = useRef(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(orderSchema),
+  });
 
   const [btnState, setBtnState] = useState(false);
   // STATE THAT HANDLES CLOSING AND OPENING OF THE MODAL DEPENDING ON IT'S VALUE, EITHER TRUE OR FALSE.
   const [showModal, setShowModal] = useState(false);
   const [btnText, setBtnText] = useState("Submit");
+  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState("");
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -33,31 +42,34 @@ const Order = () => {
     //  router.push('/order/details')
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (value) => {
+    console.log(value);
     const inputValues = {
-      email: emailRef.current.value,
-      order: orderIdRef.current.value,
+      email: value.email,
+      order: value.orderId,
     };
     console.log(inputValues);
     setBtnState(true);
     try {
-      const isValid = orderSchema.safeParse(inputValues);
-      console.log(isValid.success);
-      if (isValid.success) {
         // get user order detail using order-id and email.
         // we make a get request, to get the entry from the database.
         const response = await axios.post(`api/user`, inputValues);
+
         if (response.status === 200) {
           setBtnState(false);
           setBtnText("Successful");
           //programmatically navigate to the user's order details coming from database..
-          // console.log(response);
           handleRoute(response.data.result);
           setShowModal(true);
         }
-      } else {
-      }
+        // else {
+        //   console.log(response.status);
+        //   // if response.status !== 200 then we handle it here
+        //   if (response.status === 402) {
+        //     setError(true)
+        //     setErrorText('Incorrect email or password')
+        //   }
+        // }
     } catch (error) {
       console.log(error);
     }
@@ -85,31 +97,52 @@ const Order = () => {
       <div className="p-5 md:p-10 bg-[rgba(34,73,82,0.5)]y bg-[rgba(255,255,255,0.9)] rounded-lg md:w-fit">
         <form className="w-full space-y-8 py-5 md:py-10 ">
           {/* error message */}
+          {error && (
+            <span className="text-red-800 bg-red-300 text-sm font-medium px-5 py-5 rounded-md">
+              {errorText}
+            </span>
+          )}
           <div className="input-user-email md:w-[500px] text-black flex flex-col justify-center gap-1 ">
-            <label htmlFor="user-email" className="text-gray-500 text-xs md:text-[15px]">
+            {errors.email && (
+              <span className="text-red-800 bg-red-300 text-sm font-medium px-5 py-5 rounded-md">
+                {errors.email.message}
+              </span>
+            )}
+            <label
+              htmlFor="user-email"
+              className="text-gray-500 text-xs md:text-[15px]"
+            >
               Email :
             </label>
             <input
-              ref={emailRef}
+              {...register("email")}
               type="email"
               name="user-email"
               className="caret-black text-base bg-[rgba(255,255,255,0.25)]y border py-2 px-3 w-full rounded-md outline-none"
             />
           </div>
           <div className="input-user-order-id md:w-[500px] text-black flex flex-col justify-center gap-1">
-            <label htmlFor="user-order-d" className="text-gray-500 text-xs md:text-[15px]">
+            {errors.orderId && (
+              <span className="text-red-800 bg-red-300 text-sm font-medium px-5 py-5 rounded-md">
+                {errors.orderId.message}
+              </span>
+            )}
+            <label
+              htmlFor="user-order-d"
+              className="text-gray-500 text-xs md:text-[15px]"
+            >
               Order Id :
             </label>
             <input
-              ref={orderIdRef}
-              type="email"
+              {...register("orderId")}
+              type="text"
               name="user-order-id"
               className=" text-base bg-[rgba(255,255,255,0.25)]y border py-2 px-3 w-full rounded-md outline-none"
             />
           </div>
           <div className="submit-btn-container pt-2">
             <motion.button
-              onClick={handleSubmit}
+              onClick={handleSubmit(onSubmit)}
               disabled={btnState}
               whileTap={{ scale: 0.95 }}
               type="button"

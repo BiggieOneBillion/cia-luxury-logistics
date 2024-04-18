@@ -6,7 +6,6 @@ export const registrationSchema = z.object({
   email: z.string().email(),
   pickupLocation: z.string().min(1),
   dropoffLocation: z.string().min(1),
-  //   startDate: z.string().min(1),
   startDate: z.date(),
   endDate: z.date(),
   carsSelected: z.array(z.string()).refine((data) => data.length > 0, {

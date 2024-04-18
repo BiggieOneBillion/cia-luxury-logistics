@@ -23,15 +23,23 @@ const Carcards = ({ data }) => {
 
   const handleChange1 = () => {
     // setSelectedCar(prev => [...prev,data.name])
-    console.log(StoreValueRef.current.value);
+    // console.log(StoreValueRef.current.value);
 
     setIsDone(true);
     // handleCarData(data.name)
     StoreValueRef.current.value = true;
     setFormDatum({
       ...formDatum,
-      carSelected: [...formDatum.carSelected, data.name],
+      carSelected: [
+        ...formDatum.carSelected,
+        { vehicle: data.name, quantity: 1 },
+      ],
     });
+
+    // setFormDatum({
+    //   ...formDatum,
+    //   carSelected: [...formDatum.carSelected, data.name],
+    // });
 
     // if(ischecked){
     //   //  setFormInfo({...formInfo, [e.target.name]:[e.target.name[0].type.push(veh)]})
@@ -42,10 +50,10 @@ const Carcards = ({ data }) => {
   };
 
   const handleChange2 = () => {
-    console.log(StoreValueRef.current.value);
+    // console.log(StoreValueRef.current.value);
     setFormDatum({
       ...formDatum,
-      carSelected: formDatum.carSelected.filter((veh) => veh !== data.name),
+      carSelected: formDatum.carSelected.filter((veh) => veh.vehicle !== data.name),
     });
     // setSelectedCar(selectedCars.filter(cars => cars !== data.name))
     setIsDone(false);
@@ -62,7 +70,7 @@ const Carcards = ({ data }) => {
   useEffect(() => {
     formDatum.carSelected.length === 0
       ? null
-      : formDatum.carSelected.includes(data.name)
+      : formDatum.carSelected.map(x => x.vehicle).includes(data.name)
       ? setIsDone(true)
       : null;
   }, []);
@@ -77,7 +85,7 @@ const Carcards = ({ data }) => {
   //   // }
   // },  [ischecked])
 
-  console.log(formDatum);
+  // console.log(formDatum);
 
   return (
     <div
@@ -126,6 +134,7 @@ const Carcards = ({ data }) => {
                 id={data.id}
                 value="reserved"
                 checked={isdone}
+                disabled={isdone}
                 onChange={() => {
                   handleChange1();
                   // setFormData({...formData,  carSelected: [...formData.carSelected, data.name]})
@@ -133,7 +142,11 @@ const Carcards = ({ data }) => {
               />
               <label
                 htmlFor={data.id}
-                className="font-semibold px-4 py-1 border-2t rounded bg-black flex  labelCheckbox"
+                className={`font-semibold px-4 py-1 border-2t rounded bg-black flex  labelCheckbox ${
+                  isdone
+                    ? "cursor-not-allowed bg-[rgba(0,0,0,0.39)] text-white"
+                    : "cursor-pointer"
+                }`}
                 // onClick={()=> {
                 //  handleChange1()
 

@@ -111,7 +111,7 @@ const FormOneDate = () => {
             <input type="radio" name="return" id="returnBack"  className='hidden' value={show === 'return'} disabled={show === 'return'}/>
         </div>
 
-        <div>
+        {/* <div>
             <label 
             htmlFor="oneWay" 
             className={ show === 'oneway' ?'border py-1 px-3 bgy-[rgb(34,64,114)] bg-[#384a59] text-white hover:rounded-md' : 'border py-1 px-3 bg-white text-[rgb(34,64,114)] hover:rounded-md'}
@@ -120,7 +120,7 @@ const FormOneDate = () => {
                 One Way
             </label>
             <input type="radio" name="return" id="oneWay"  className='hidden' value={show === 'oneway'}/>
-        </div>
+        </div> */}
        </div>
 
        {/* <div className='current-location flex flex-col gap-y-3'>
